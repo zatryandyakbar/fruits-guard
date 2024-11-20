@@ -7,4 +7,5 @@
     <string name="home_nav">Home</string>
     <string name="detect_nav">Detect</string>
     <string name="favorite_nav">Favorite\n</string>
+    <string name="fabButton">Fab Button\n</string>
 </resources>
