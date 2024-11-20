@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.capstone.fruitsguard"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.capstone.fruitsguard"

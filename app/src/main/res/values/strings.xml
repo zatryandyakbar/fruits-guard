@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">FruitsGuard</string>
+    <string name="fruits_image" />
+    <string name="google_logo" />
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_nav">Home</string>
+    <string name="detect_nav">Detect</string>
+    <string name="favorite_nav">Favorite\n</string>
 </resources>
