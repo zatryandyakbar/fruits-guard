@@ -3,16 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/orange">
+    android:background="@color/orange"
+    android:orientation="horizontal"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/headerTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/header_title"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:contentDescription="@string/icon_profile"
+        android:id="@+id/icProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/header_title"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold" />
+        android:src="@drawable/ic_profile" />
 </LinearLayout>
+
+

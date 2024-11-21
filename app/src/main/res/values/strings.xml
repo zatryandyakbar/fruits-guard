@@ -6,7 +6,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_nav">Home</string>
     <string name="detect_nav">Detect</string>
-    <string name="favorite_nav">Favorite\n</string>
+    <string name="favorite_nav">Favorite</string>
     <string name="fabButton">Fab Button\n</string>
     <string name="icon_profile">Icon profile</string>
     <string name="header_title">Header Title</string>

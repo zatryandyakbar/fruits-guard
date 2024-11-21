@@ -2,6 +2,7 @@ package com.capstone.fruitsguard
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
 import com.capstone.fruitsguard.ui.DetectFragment
 import com.capstone.fruitsguard.ui.FavoriteFragment
 import com.capstone.fruitsguard.ui.HomeFragment
@@ -13,14 +14,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val headerTitle = findViewById<TextView>(R.id.headerTitle)
 
         if (savedInstanceState == null) {
+            headerTitle.text = getString(R.string.home_nav)
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, DetectFragment()).commit()
         }
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
+                    headerTitle.text = getString(R.string.home_nav)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
                     true
                 }
@@ -29,6 +33,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_favorite -> {
+                    headerTitle.text = getString(R.string.favorite_nav)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FavoriteFragment()).commit()
                     true
                 }
