@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             headerTitle.text = getString(R.string.home_nav)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, DetectFragment()).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
         }
 
         bottomNavigationView.setOnItemSelectedListener { item ->
@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_detect -> {
+                    headerTitle.text = getString(R.string.detect_nav)
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, DetectFragment()).commit()
                     true
                 }

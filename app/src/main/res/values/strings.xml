@@ -10,4 +10,8 @@
     <string name="fabButton">Fab Button\n</string>
     <string name="icon_profile">Icon profile</string>
     <string name="header_title">Header Title</string>
+    <string name="camera_placeholder">Camera Placeholder</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="deteksi">Deteksi</string>
 </resources>
