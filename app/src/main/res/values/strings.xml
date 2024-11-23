@@ -13,5 +13,5 @@
     <string name="camera_placeholder">Camera Placeholder</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
-    <string name="deteksi">Deteksi</string>
+    <string name="analyze">Analyze</string>
 </resources>
