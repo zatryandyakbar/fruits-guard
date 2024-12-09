@@ -35,6 +35,7 @@ class DetectFragment : Fragment() {
     private var currentImageUri: Uri? = null
     private var originalImageUri: Uri? = null
     private var selectedFruit: String? = null
+    private var isFromResultActivity = false
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -183,11 +184,13 @@ class DetectFragment : Fragment() {
 
 
     private fun moveToResultActivity(hasil: String?, selectedFruit: String, description: String) {
-        val intent = Intent(requireContext(), ResultActivity::class.java)
-        intent.putExtra("hasil", hasil)
-        intent.putExtra("imageUri", currentImageUri.toString())
-        intent.putExtra("selectedFruit", selectedFruit)
-        intent.putExtra("description", description)
+        isFromResultActivity = true
+        val intent = Intent(requireContext(), ResultActivity::class.java).apply {
+            putExtra("hasil", hasil)
+            putExtra("imageUri", currentImageUri.toString())
+            putExtra("selectedFruit", selectedFruit)
+            putExtra("description", description)
+        }
         startActivity(intent)
     }
 
@@ -213,6 +216,30 @@ class DetectFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isFromResultActivity) {
+            resetView()
+            isFromResultActivity = false
+        }
+    }
+
+    private fun resetView() {
+        // Reset preview image
+        binding.previewImageView.setImageResource(R.drawable.image_preview) // Gambar default
+
+        // Reset spinner
+        val options = mutableListOf("Pilih Buah")
+        options.addAll(resources.getStringArray(R.array.fruit_array))
+        binding.spinnerOptions.setItems(options)
+        binding.spinnerOptions.selectedIndex = 0
+
+        // Reset state variables
+        currentImageUri = null
+        originalImageUri = null
+        selectedFruit = null
     }
 
     companion object {
