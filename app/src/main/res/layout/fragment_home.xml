@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvListEvent"
+            android:id="@+id/rvListArticles"
             android:layout_width="match_parent"
             android:layout_height="650dp"
             android:layout_marginTop="15dp"
