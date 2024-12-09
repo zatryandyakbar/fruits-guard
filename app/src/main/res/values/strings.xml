@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FruitsGuard</string>
+    <string name="app_name">Fruits Guard</string>
     <string name="fruits_image" />
     <string name="google_logo" />
     <!-- TODO: Remove or change this placeholder text -->
@@ -14,4 +14,22 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="analyze">Analyze</string>
+    <string-array name="fruit_array">
+        <item>Strawberry</item>
+        <item>Orange</item>
+        <item>Mango</item>
+        <item>Banana</item>
+        <item>Apple</item>
+        <item>Guava</item>
+        <item>Grape</item>
+    </string-array>
+    <string-array name="fruit_descriptions">
+        <item>Strawberry: kaya akan vitamin C dan serat.</item>
+        <item>Orange: sumber energi cepat dengan kalium yang tinggi.</item>
+        <item>Mango: membantu meningkatkan kekebalan tubuh.</item>
+        <item>Banana: kaya akan vitamin C dan serat.</item>
+        <item>Apple: sumber energi cepat dengan kalium yang tinggi.</item>
+        <item>Guava: membantu meningkatkan kekebalan tubuh.</item>
+        <item>Grape: membantu meningkatkan kekebalan tubuh.</item>
+    </string-array>
 </resources>

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/textColor"
     android:padding="24dp"
     android:scrollbars="none"
-    tools:context=".RegisterActivity">
+    tools:context=".ui.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,19 +15,19 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-<!--        <ImageView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="180dp"-->
-<!--            android:src="@drawable/register"-->
-<!--            android:layout_gravity="center"/>-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/logo2"
+            android:layout_gravity="center"/>
 
         <!-- Title Section -->
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign Up Now"
-            android:textColor="@color/black"
+            android:text="Let's register"
+            android:textColor="@color/moreDark"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:text="Please fill the details and create account"
             android:textColor="#B2B2B2"
+            android:textStyle="bold"
             android:textSize="14sp"
             android:gravity="center"
             android:layout_marginTop="8dp" />
@@ -99,8 +100,8 @@
             android:id="@+id/password_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Password must be atleast 6 characters"
-            android:textColor="#666666"
+            android:text="Password must be atleast 8 characters"
+            android:textColor="@color/orange"
             android:textSize="12sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp" />
@@ -112,7 +113,7 @@
             android:layout_height="wrap_content"
             android:text="Sign Up"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#FF6D00"
+            android:backgroundTint="@color/orange"
             android:layout_marginTop="32dp"
             android:padding="12dp"
             android:layout_marginBottom="16dp"
@@ -132,6 +133,7 @@
                 android:layout_height="wrap_content"
                 android:text="Already have an account? "
                 android:textColor="#B2B2B2"
+                android:textStyle="bold"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />
@@ -140,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Log in"
-                android:textColor="#FF6D00"
+                android:textColor="@color/moreDark"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:textStyle="bold"
@@ -158,6 +160,7 @@
             android:textColor="#B2B2B2"
             android:textSize="14sp"
             android:gravity="center"
+            android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
         <ImageView

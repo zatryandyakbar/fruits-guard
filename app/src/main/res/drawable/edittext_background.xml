@@ -9,7 +9,7 @@
         android:color="#B2B2B2" />
 
     <!-- Background Color -->
-    <solid android:color="#FFFFFF" />
+    <solid android:color="@color/textColor" />
 
     <!-- Padding inside the EditText -->
     <padding

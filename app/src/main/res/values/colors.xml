@@ -2,7 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="abu">#B2B2B2</color>
-    <color name="orange">#FF6E00</color>
-    <color name="darkOrange">#C35E14</color>
+    <color name="abu">#77B2B2B2</color>
+    <color name="orange">#4F6F52</color>
+    <color name="darkOrange">#E8DFCA</color>
+    <color name="textColor">#F5EFE6</color>
+    <color name="moreDark">#1A4D2E</color>
 </resources>

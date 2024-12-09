@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/darkOrange">
 
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -15,9 +16,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <include
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/header"
-        layout="@layout/header_layout"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/menu_profl"
+            app:title="FruitsGuard"
+            app:titleTextColor="@color/white"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -25,8 +38,11 @@
         android:layout_height="70dp"
         app:menu="@menu/bottom_nav"
         android:background="@color/orange"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/textColor"
+        app:itemTextColor="@color/textColor"
+        app:itemTextAppearanceActiveBoldEnabled="true"
+        app:labelVisibilityMode="selected"
+        app:itemActiveIndicatorStyle="@color/darkOrange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
