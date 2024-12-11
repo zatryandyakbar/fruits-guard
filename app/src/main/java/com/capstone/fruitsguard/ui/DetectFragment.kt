@@ -36,28 +36,24 @@ class DetectFragment : Fragment() {
     private var originalImageUri: Uri? = null
     private var selectedFruit: String? = null
     private var isFromResultActivity = false
-    private var lastButtonClicked: String? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                showToast("Permission granted")
-                when (lastButtonClicked) {
-                    "gallery" -> startGallery()
-                    "camera" -> startCamera()
-                }
+                showToast("Permission request granted")
             } else {
-                showToast("Permission denied")
+                showToast("Permission request denied")
             }
         }
 
-    private fun allPermissionsGranted(permission: String) =
+    private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
             requireContext(),
-            permission
+            REQUIRED_PERMISSION
         ) == PackageManager.PERMISSION_GRANTED
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,23 +66,18 @@ class DetectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+        }
+
         binding.btnGallery.setOnClickListener {
-            lastButtonClicked = "gallery"
-            if (allPermissionsGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                startGallery()
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
+            startGallery()
         }
 
         binding.btnCamera.setOnClickListener {
-            lastButtonClicked = "camera"
-            if (allPermissionsGranted(Manifest.permission.CAMERA)) {
-                startCamera()
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
+            startCamera()
         }
+
 
         val options = mutableListOf("Pilih Buah")
         options.addAll(resources.getStringArray(R.array.fruit_array))
@@ -98,7 +89,7 @@ class DetectFragment : Fragment() {
 
         spinnerOptions.setOnItemSelectedListener { _, position, _, item ->
             if (position == 0) {
-                // Do nothing
+
             } else {
                 selectedFruit = item.toString()
                 if (options.contains("Pilih Buah")) {
@@ -122,6 +113,7 @@ class DetectFragment : Fragment() {
             } ?: showToast("Pilih gambar terlebih dahulu")
         }
     }
+
 
     private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -153,7 +145,6 @@ class DetectFragment : Fragment() {
             currentImageUri = null
         }
     }
-
     @SuppressLint("Recycle")
     private fun analyzeImage(imageUri: Uri, selectedFruit: String, description: String) {
         try {
@@ -191,6 +182,7 @@ class DetectFragment : Fragment() {
         }
     }
 
+
     private fun moveToResultActivity(hasil: String?, selectedFruit: String, description: String) {
         isFromResultActivity = true
         val intent = Intent(requireContext(), ResultActivity::class.java).apply {
@@ -201,6 +193,7 @@ class DetectFragment : Fragment() {
         }
         startActivity(intent)
     }
+
 
     private fun showImage() {
         currentImageUri?.let {
@@ -234,14 +227,23 @@ class DetectFragment : Fragment() {
     }
 
     private fun resetView() {
-        binding.previewImageView.setImageResource(R.drawable.image_preview)
+        // Reset preview image
+        binding.previewImageView.setImageResource(R.drawable.image_preview) // Gambar default
+
+        // Reset spinner
         val options = mutableListOf("Pilih Buah")
         options.addAll(resources.getStringArray(R.array.fruit_array))
         binding.spinnerOptions.setItems(options)
         binding.spinnerOptions.selectedIndex = 0
+
+        // Reset state variables
         currentImageUri = null
         originalImageUri = null
         selectedFruit = null
+    }
+
+    companion object {
+        private val REQUIRED_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE
     }
 }
 
