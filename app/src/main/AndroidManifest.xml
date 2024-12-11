@@ -33,10 +33,10 @@
             android:name=".ui.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.WelcomeActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

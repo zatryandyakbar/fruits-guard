@@ -2,6 +2,7 @@
     <string name="app_name">Fruits Guard</string>
     <string name="fruits_image" />
     <string name="google_logo" />
+    <string name="your_web_client_id">552920204163-c62mao1p838hlin4kembltbhuisofkjs.apps.googleusercontent.com</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_nav">Home</string>

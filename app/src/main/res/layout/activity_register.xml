@@ -70,30 +70,14 @@
             android:textColor="@color/black"
             android:inputType="textEmailAddress" />
 
-        <FrameLayout
+        <com.capstone.fruitsguard.MyEditTextPassword
+            android:id="@+id/editTextPasswordRegister"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/et_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:background="@drawable/edittext_background"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp"
-                android:inputType="textPassword" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_hide"/>
-        </FrameLayout>
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_background"
+            android:layout_marginTop="16dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/abu"/>
 
 
         <TextView
