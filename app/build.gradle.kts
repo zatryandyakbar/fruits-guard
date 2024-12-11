@@ -73,4 +73,7 @@ dependencies {
     implementation("androidx.credentials:credentials:1.2.2")
     implementation("com.google.android.gms:play-services-auth:21.1.1")
 
+    //lottie animation
+    implementation("com.airbnb.android:lottie:5.2.0")
+
 }

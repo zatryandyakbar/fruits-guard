@@ -85,10 +85,15 @@ class ProfileActivity : AppCompatActivity() {
             auth.signOut()
             credentialManager.clearCredentialState(ClearCredentialStateRequest())
             Toast.makeText(this@ProfileActivity, "Berhasil logout", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this@ProfileActivity, LoginActivity::class.java))
+
+            // Arahkan ke LoginActivity dan hapus ProfileActivity dari stack
+            val intent = Intent(this@ProfileActivity, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
             finish()
         }
     }
+
 
     private fun observeViewModel() {
         // Observasi nama lengkap dari ViewModel

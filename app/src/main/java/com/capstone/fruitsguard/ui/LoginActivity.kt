@@ -3,11 +3,15 @@ package com.capstone.fruitsguard.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import com.capstone.fruitsguard.MainActivity
 import com.capstone.fruitsguard.R
 import com.capstone.fruitsguard.databinding.ActivityLoginBinding
@@ -100,9 +104,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
+        showLoading(true)
+
         val credential: AuthCredential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
+                showLoading(false)
                 if (task.isSuccessful) {
                     val currentUser = auth.currentUser
                     if (currentUser != null) {
@@ -128,6 +135,7 @@ class LoginActivity : AppCompatActivity() {
             database.child(uid).setValue(userMap)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Welcome, ${account.displayName}!", Toast.LENGTH_SHORT).show()
+
                     val intent = Intent(this, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
@@ -142,7 +150,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
             //cek apakah login menggunakan goggle icon atau tidak
-            if (auth.currentUser?.providerData?.any { it.providerId == GoogleAuthProvider.PROVIDER_ID } == true) {
+            if (auth.currentUser?.providerData?.any { it.providerId == GoogleAuthProvider.PROVIDER_ID } == false) {
                 //Jika login menggunakan icon Google, arahkan ke mainAvtivity
                 Toast.makeText(this, "Login Berhasil!!!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
@@ -170,12 +178,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser(email: String, password: String) {
+        showLoading(true)
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
+                showLoading(false)
                 if (task.isSuccessful) {
                     // Login berhasil
                     Toast.makeText(this, "Login berhasil!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java) // Replace with your main activity
+
+                    val intent = Intent(this, MainActivity::class.java) // Ganti dengan main activity Anda
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 } else {
@@ -183,6 +195,20 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Login gagal: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.loadingOverlay.visibility = View.VISIBLE
+            binding.loadingAnimationOverlay.playAnimation()
+            binding.buttonLogin.isEnabled = false
+            binding.imageViewGoogleSignIn.isEnabled = false
+        } else {
+            binding.loadingOverlay.visibility = View.GONE
+            binding.loadingAnimationOverlay.cancelAnimation()
+            binding.buttonLogin.isEnabled = true
+            binding.imageViewGoogleSignIn.isEnabled = true
+        }
     }
 
     override fun onStart() {
