@@ -43,8 +43,6 @@ class DetectFragment : Fragment() {
         ) { isGranted: Boolean ->
             if (isGranted) {
                 showToast("Permission request granted")
-            } else {
-                showToast("Permission request denied")
             }
         }
 
