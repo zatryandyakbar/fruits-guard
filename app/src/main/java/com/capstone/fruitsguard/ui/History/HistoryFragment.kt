@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,10 +43,26 @@ class HistoryFragment : Fragment() {
             adapter = this@HistoryFragment.adapter
         }
 
+        //Tambahkan Listener
+        setupDeleteListener()
+
         // Load data dari database
         loadHistoryData()
 
         return binding.root
+    }
+
+    private fun setupDeleteListener() {
+        adapter.setOnDeleteClickListener { scanResult ->
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                database.scanResultDao().deleteScanResultById(scanResult.id)
+                val updateList = database.scanResultDao().getAllScanResults()
+                withContext(Dispatchers.Main) {
+                    adapter.submitList(updateList)
+                    Toast.makeText(requireContext(), "History berhasil dihapus!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun loadHistoryData() {
@@ -53,6 +70,12 @@ class HistoryFragment : Fragment() {
             val scanResults = database.scanResultDao().getAllScanResults()
             withContext(Dispatchers.Main) {
                 adapter.submitList(scanResults)
+
+                binding.tvEmptyHistory.visibility = if (scanResults.isEmpty()) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
             }
         }
     }

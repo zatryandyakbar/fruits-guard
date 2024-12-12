@@ -37,8 +37,20 @@ class HistoryAdapter : ListAdapter<ScanResultEntity, HistoryAdapter.ViewHolder>(
                     .error(R.drawable.image_preview) // Tambahkan placeholder gambar
                     .placeholder(R.drawable.image_preview)
                     .into(imgPhotoHistory)
+
+                imgDeleteHistory.setOnClickListener {
+                    onDeleteClickListener?.invoke(scanResult)
+                }
             }
         }
+    }
+
+    //Tambahkan property untuk listener
+    private var onDeleteClickListener: ((ScanResultEntity) -> Unit)? = null
+
+    //Fungsi untuk setListener
+    fun setOnDeleteClickListener(listener: (ScanResultEntity) -> Unit) {
+        onDeleteClickListener = listener
     }
 
     // DiffCallback untuk membandingkan item dan memutuskan perubahan data

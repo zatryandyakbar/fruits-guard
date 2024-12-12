@@ -21,10 +21,10 @@
         android:padding="8dp">
 
         <ImageView
-            android:contentDescription="Thumbnail"
             android:id="@+id/imgPhotoHistory"
             android:layout_width="match_parent"
             android:layout_height="250dp"
+            android:contentDescription="Thumbnail"
             android:scaleType="centerCrop"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent"
@@ -35,29 +35,43 @@
 
         <TextView
             android:id="@+id/tvNamaBuahHistory"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:textColor="@color/textColor"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="9dp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/imgPhotoHistory"
-            tools:text="Title"
-            android:textColor="@color/textColor" />
+            tools:text="Title" />
 
         <TextView
             android:id="@+id/tvResultBuahHistory"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:layout_marginTop="9dp"
+            android:textColor="@color/textColor"
+            android:textSize="18sp"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toBottomOf="@+id/tvNamaBuahHistory"
-            tools:text="Result"
-            android:textColor="@color/textColor" />
+            tools:text="Result" />
+
+        <ImageView
+            android:id="@+id/imgDeleteHistory"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/delete_icon"
+            android:src="@drawable/ic_delete"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.935"
+            card_view:layout_constraintStart_toEndOf="@+id/tvResultBuahHistory"
+            card_view:layout_constraintTop_toBottomOf="@+id/imgPhotoHistory" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>
