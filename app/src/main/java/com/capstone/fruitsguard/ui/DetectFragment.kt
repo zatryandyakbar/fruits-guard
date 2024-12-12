@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
@@ -38,6 +39,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.FileOutputStream
 
 class DetectFragment : Fragment() {
 
@@ -212,11 +214,11 @@ class DetectFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val color = if (result == "Segar") Color.GREEN else Color.RED
-                val savedImageFile = saveImageToInternalStorage(imageUri)
+                val compressedImageFile = compressImage(imageUri)
                 val analysisResult = ScanResultEntity(
                     fruitName = fruit,
                     result = result,
-                    imageUrl = savedImageFile.absolutePath,
+                    imageUrl = compressedImageFile.absolutePath,
                     color = color
                 )
                 appDatabase.scanResultDao().insertScanResult(analysisResult)
@@ -317,6 +319,26 @@ class DetectFragment : Fragment() {
             binding.loadingOverlay.visibility = View.GONE
             binding.loadingAnimationOverlay.cancelAnimation()
         }
+    }
+
+    private fun compressImage(imageUri: Uri): File {
+        val context = requireContext()
+        val inputStream = context.contentResolver.openInputStream(imageUri)
+        val originalBitmap = BitmapFactory.decodeStream(inputStream)
+
+        // Tentukan ukuran kompresi (misalnya 50% dari ukuran asli)
+        val scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, 240, 360, false)
+
+        // Simpan bitmap yang telah dikompresi ke file internal
+        val fileName = "compressed_fruit_${System.currentTimeMillis()}.jpg"
+        val outputFile = File(context.filesDir, fileName)
+
+        val outputStream = FileOutputStream(outputFile)
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        return outputFile
     }
 
     companion object {
