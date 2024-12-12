@@ -16,17 +16,26 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.capstone.fruitsguard.data.retrofit.ApiClient
 import com.capstone.fruitsguard.data.remote.PredictResponse
 import com.capstone.fruitsguard.R
+import com.capstone.fruitsguard.data.database.AppDatabase
+import com.capstone.fruitsguard.data.database.ScanResultEntity
 import com.capstone.fruitsguard.databinding.FragmentDetectBinding
 import com.capstone.fruitsguard.getImageUri
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class DetectFragment : Fragment() {
 
@@ -36,6 +45,9 @@ class DetectFragment : Fragment() {
     private var originalImageUri: Uri? = null
     private var selectedFruit: String? = null
     private var isFromResultActivity = false
+
+    // Tambahkan instance Room Database
+    private lateinit var appDatabase: AppDatabase
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -58,6 +70,11 @@ class DetectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetectBinding.inflate(inflater, container, false)
+        appDatabase = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java,
+            "result_data"
+        ).build()
         return binding.root
     }
 
@@ -158,6 +175,10 @@ class DetectFragment : Fragment() {
                     override fun onResponse(call: Call<PredictResponse>, response: Response<PredictResponse>) {
                         if (response.isSuccessful && response.body() != null) {
                             val result = response.body()?.hasil
+
+                            // Simpan hasil analisis ke dalam Room Database
+                            saveAnalysisResult(selectedFruit, result ?: "Tidak Diketahui", imageUri)
+
                             moveToResultActivity(result, selectedFruit, description)
                         } else {
                             val errorBody = response.errorBody()?.string()
@@ -180,6 +201,45 @@ class DetectFragment : Fragment() {
         }
     }
 
+    private fun saveAnalysisResult(fruit: String, result: String, imageUri: Uri) {
+        // Gunakan viewModelScope atau lifecycleScope
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val savedImageFile = saveImageToInternalStorage(imageUri)
+                val analysisResult = ScanResultEntity(
+                    fruitName = fruit,
+                    result = result,
+                    imageUrl = savedImageFile.absolutePath
+                )
+                appDatabase.scanResultDao().insertScanResult(analysisResult)
+                withContext(Dispatchers.Main) {
+                    // Tambahkan notifikasi atau feedback jika perlu
+                    Toast.makeText(requireContext(), "Hasil analisis disimpan", Toast.LENGTH_SHORT).show()
+                }
+                Log.d("DetectFragment", "Hasil analisis disimpan di Room Database.")
+            } catch (e: Exception) {
+                Log.e("DetectFragment", "Gagal menyimpan hasil analisis", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Gagal menyimpan hasil", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun saveImageToInternalStorage(imageUri: Uri): File {
+        val context = requireContext()
+        val inputStream = context.contentResolver.openInputStream(imageUri)
+        val fileName = "fruit_${System.currentTimeMillis()}.jpg"
+
+        val outputFile = File(context.filesDir, fileName)
+        inputStream?.use { input ->
+            outputFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        return outputFile
+    }
 
     private fun moveToResultActivity(hasil: String?, selectedFruit: String, description: String) {
         isFromResultActivity = true
@@ -191,7 +251,6 @@ class DetectFragment : Fragment() {
         }
         startActivity(intent)
     }
-
 
     private fun showImage() {
         currentImageUri?.let {
@@ -244,4 +303,3 @@ class DetectFragment : Fragment() {
         private val REQUIRED_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE
     }
 }
-

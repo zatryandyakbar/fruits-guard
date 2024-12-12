@@ -22,7 +22,7 @@
 
         <ImageView
             android:contentDescription="Thumbnail"
-            android:id="@+id/imgPhoto"
+            android:id="@+id/imgPhotoHistory"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
@@ -34,7 +34,7 @@
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/tvNamaBuahHistory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -43,9 +43,22 @@
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.0"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/imgPhoto"
+            card_view:layout_constraintTop_toBottomOf="@+id/imgPhotoHistory"
             tools:text="Title"
-            android:textColor="@color/textColor"
-            card_view:drawableEndCompat="@drawable/ic_favourite" />
+            android:textColor="@color/textColor" />
+
+        <TextView
+            android:id="@+id/tvResultBuahHistory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="9dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/tvNamaBuahHistory"
+            tools:text="Result"
+            android:textColor="@color/textColor" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

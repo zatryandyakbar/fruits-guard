@@ -6,8 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.capstone.fruitsguard.databinding.ActivityMainBinding
 import com.capstone.fruitsguard.ui.DetectFragment
-import com.capstone.fruitsguard.ui.FavoriteFragment
-import com.capstone.fruitsguard.ui.HomeFragment
+import com.capstone.fruitsguard.ui.History.HistoryFragment2
 import com.capstone.fruitsguard.ui.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
@@ -20,17 +19,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, DetectFragment()).commit()
         }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> {
-                    if (supportFragmentManager.findFragmentByTag(HomeFragment::class.java.simpleName) == null) {
-                        replaceFragment(HomeFragment())
-                    }
-                    true
-                }
                 R.id.nav_detect -> {
                     if (supportFragmentManager.findFragmentByTag(DetectFragment::class.java.simpleName) == null) {
                         replaceFragment(DetectFragment())
@@ -38,8 +31,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_favorite -> {
-                    if (supportFragmentManager.findFragmentByTag(FavoriteFragment::class.java.simpleName) == null) {
-                        replaceFragment(FavoriteFragment())
+                    if (supportFragmentManager.findFragmentByTag(HistoryFragment2::class.java.simpleName) == null) {
+                        replaceFragment(HistoryFragment2())
                     }
                     true
                 }
