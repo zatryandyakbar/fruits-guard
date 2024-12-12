@@ -157,30 +157,6 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="16dp" />
             </LinearLayout>
-
-
-
-            <!-- Google Sign In -->
-            <TextView
-                android:id="@+id/connect_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="or connect with"
-                android:textColor="#B2B2B2"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
-
-            <ImageView
-                android:id="@+id/google_sign_in"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_google_logo"
-                android:layout_gravity="center" />
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
-
 </LinearLayout>

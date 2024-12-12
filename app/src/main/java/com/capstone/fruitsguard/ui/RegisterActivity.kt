@@ -93,6 +93,7 @@ class RegisterActivity : AppCompatActivity() {
                         }
                     }
             } else {
+                showLoading(false)
                 Toast.makeText(this, "Registration Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
         }

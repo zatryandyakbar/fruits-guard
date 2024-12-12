@@ -3,8 +3,10 @@ package com.capstone.fruitsguard.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.lifecycle.Observer
@@ -41,6 +43,12 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
 
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
@@ -117,5 +125,15 @@ class ProfileActivity : AppCompatActivity() {
                 profileViewModel.clearToastMessage()
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home-> {
+                onBackPressed() // Menangani tombol back
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

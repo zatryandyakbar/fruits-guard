@@ -4,5 +4,7 @@
         <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/orange</item>
         <item name="android:navigationBarColor">#EB4F6F52</item>
+        <item name="android:windowBackground">@color/orange</item>
+        <item name="colorControlNormal">@color/textColor</item>
     </style>
 </resources>

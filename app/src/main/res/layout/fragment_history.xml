@@ -23,7 +23,7 @@
         android:visibility="gone"
         android:text="@string/history_masih_kosong"
         android:textSize="18sp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/orange"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

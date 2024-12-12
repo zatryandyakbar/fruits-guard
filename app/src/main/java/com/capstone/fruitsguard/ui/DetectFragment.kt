@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
@@ -14,8 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +30,8 @@ import com.capstone.fruitsguard.data.database.AppDatabase
 import com.capstone.fruitsguard.data.database.ScanResultEntity
 import com.capstone.fruitsguard.databinding.FragmentDetectBinding
 import com.capstone.fruitsguard.getImageUri
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +42,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 class DetectFragment : Fragment() {
@@ -165,50 +171,55 @@ class DetectFragment : Fragment() {
     @SuppressLint("Recycle")
     private fun analyzeImage(imageUri: Uri, selectedFruit: String, description: String) {
         showLoading(true)
+        disableBottomNavigationAndToolbar()
         try {
-            val inputStream = requireContext().contentResolver.openInputStream(imageUri)
-            val requestBody = inputStream?.readBytes()?.toRequestBody("image/jpeg".toMediaTypeOrNull())
-            val imagePart = requestBody?.let {
-                MultipartBody.Part.createFormData("input", "image.jpg", it)
-            }
-            if (imagePart != null) {
-                val call = ApiClient.instance.uploadImage(imagePart)
-                call.enqueue(object : Callback<PredictResponse> {
-                    override fun onResponse(call: Call<PredictResponse>, response: Response<PredictResponse>) {
-                        if (response.isSuccessful && response.body() != null) {
-                            val result = response.body()?.hasil
+            // Kompres gambar sebelum analisis
+            val compressedBitmap = compressImage(imageUri)
 
-                            // Simpan hasil analisis ke dalam Room Database
-                            saveAnalysisResult(selectedFruit, result ?: "Tidak Diketahui", imageUri)
-                            moveToResultActivity(result, selectedFruit, description)
-                        } else {
-                            val errorBody = response.errorBody()?.string()
-                            showLoading(false)
-                            Log.e("API Error", "Error Body: $errorBody")
-                            showToast("Gagal memproses: $errorBody")
-                        }
-                    }
+            // Konversi gambar yang telah dikompres menjadi byte array
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            compressedBitmap?.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+            val requestBody = byteArrayOutputStream.toByteArray().toRequestBody("image/jpeg".toMediaTypeOrNull())
+            val imagePart = MultipartBody.Part.createFormData("input", "image.jpg", requestBody)
 
-                    override fun onFailure(call: Call<PredictResponse>, t: Throwable) {
-                        Log.e("API Failure", "Error: ${t.message}")
-                        showToast("Gagal terhubung: ${t.message}")
+            val call = ApiClient.instance.uploadImage(imagePart)
+            call.enqueue(object : Callback<PredictResponse> {
+                override fun onResponse(call: Call<PredictResponse>, response: Response<PredictResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val result = response.body()?.hasil
+
+                        // Simpan hasil analisis ke dalam Room Database
+                        saveAnalysisResult(selectedFruit, result ?: "Tidak Diketahui", imageUri)
+                        moveToResultActivity(result, selectedFruit, description)
+                    } else {
+                        val errorBody = response.errorBody()?.string()
                         showLoading(false)
+                        enableBottomNavigationAndToolbar()
+                        Log.e("API Error", "Error Body: $errorBody")
+                        showToast("Gagal memproses: $errorBody")
                     }
-                })
-            } else {
-                showToast("Gagal membaca gambar")
-                showLoading(false)
-            }
+                }
+
+                override fun onFailure(call: Call<PredictResponse>, t: Throwable) {
+                    Log.e("API Failure", "Error: ${t.message}")
+                    showToast("Gagal terhubung: ${t.message}")
+                    showLoading(false)
+                    enableBottomNavigationAndToolbar()
+                }
+            })
         } catch (e: Exception) {
             Log.e("AnalyzeImage Error", "Exception: ${e.message}")
             showToast("Terjadi kesalahan: ${e.message}")
             showLoading(false)
+            enableBottomNavigationAndToolbar()
         }
     }
+
 
     private fun saveAnalysisResult(fruit: String, result: String, imageUri: Uri) {
         // Gunakan viewModelScope atau lifecycleScope
         showLoading(false)
+        enableBottomNavigationAndToolbar()
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val color = if (result == "Segar") Color.GREEN else Color.RED
@@ -317,6 +328,61 @@ class DetectFragment : Fragment() {
             binding.loadingOverlay.visibility = View.GONE
             binding.loadingAnimationOverlay.cancelAnimation()
         }
+    }
+
+    private fun compressImage(imageUri: Uri): Bitmap? {
+        val inputStream = requireContext().contentResolver.openInputStream(imageUri)
+        val originalBitmap = BitmapFactory.decodeStream(inputStream)
+
+        // Tentukan ukuran baru untuk gambar
+        val maxWidth = 800
+        val maxHeight = 800
+
+        val width = originalBitmap.width
+        val height = originalBitmap.height
+        val ratio = width.toFloat() / height.toFloat()
+
+        var newWidth = maxWidth
+        var newHeight = (maxWidth / ratio).toInt()
+
+        if (newHeight > maxHeight) {
+            newHeight = maxHeight
+            newWidth = (maxHeight * ratio).toInt()
+        }
+
+        // Resize gambar
+        return Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, false)
+    }
+
+
+
+    private fun enableBottomNavigationAndToolbar() {
+        // Aktifkan kembali BottomNavigationView
+        val activity = requireActivity()
+        val bottomNavigationView = activity.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView?.menu?.setGroupEnabled(0, true)
+
+        // Aktifkan kembali Toolbar
+        val toolbar = activity.findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar?.isEnabled = true
+        toolbar?.isClickable = true
+        toolbar?.isFocusable = true
+        toolbar?.menu?.setGroupEnabled(0, true)
+    }
+
+
+    private fun disableBottomNavigationAndToolbar() {
+        // Nonaktifkan BottomNavigationView
+        val activity = requireActivity()
+        val bottomNavigationView = activity.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView?.menu?.setGroupEnabled(0, false)
+
+        // Nonaktifkan Toolbar
+        val toolbar = activity.findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar?.isEnabled = false // Disable toolbar action
+        toolbar?.isClickable = false // Disable click on the toolbar
+        toolbar?.isFocusable = false // Disable focusing on the toolbar
+        toolbar?.menu?.setGroupEnabled(0, false) // Disable menu items on toolbar
     }
 
     companion object {

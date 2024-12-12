@@ -3,6 +3,7 @@ package com.capstone.fruitsguard
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.capstone.fruitsguard.databinding.ActivityMainBinding
 import com.capstone.fruitsguard.ui.DetectFragment
