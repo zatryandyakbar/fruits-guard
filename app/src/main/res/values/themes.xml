@@ -5,7 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/orange</item>
         <item name="android:navigationBarColor">#EB4F6F52</item>
-
+        <item name="android:windowBackground">@color/orange</item>
     </style>
 
     <style name="Theme.FruitsGuard" parent="Base.Theme.FruitsGuard" />
