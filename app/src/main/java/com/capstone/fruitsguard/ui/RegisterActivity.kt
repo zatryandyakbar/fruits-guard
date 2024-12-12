@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import com.capstone.fruitsguard.R
 import com.capstone.fruitsguard.databinding.ActivityRegisterBinding
@@ -37,7 +38,7 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.loginText.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            finishAffinity()
         }
     }
 
@@ -59,8 +60,8 @@ class RegisterActivity : AppCompatActivity() {
                 binding.editTextPasswordRegister.error = "Password harus diisi"
                 false
             }
-            password.length < 6 -> {
-                binding.editTextPasswordRegister.error = "Password minimal 6 karakter"
+            password.length < 8 -> {
+                binding.editTextPasswordRegister.error = "Password minimal 8 karakter"
                 false
             }
             else -> true
@@ -68,6 +69,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerUser(fullName: String, email: String, password: String) {
+        showLoading(true)
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val user = auth.currentUser
@@ -82,15 +84,27 @@ class RegisterActivity : AppCompatActivity() {
                     .addOnCompleteListener { dbTask ->
                         if (dbTask.isSuccessful) {
                             Toast.makeText(this, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                            showLoading(false)
                             startActivity(Intent(this, LoginActivity::class.java))
                             finish()
                         } else {
+                            showLoading(false)
                             Toast.makeText(this, "Database error: ${dbTask.exception?.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
             } else {
                 Toast.makeText(this, "Registration Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.loadingOverlay.visibility = View.VISIBLE
+            binding.loadingAnimationOverlay.playAnimation()
+        } else {
+            binding.loadingOverlay.visibility = View.GONE
+            binding.loadingAnimationOverlay.cancelAnimation()
         }
     }
 }

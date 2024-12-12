@@ -1,5 +1,6 @@
 package com.capstone.fruitsguard.ui
 
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,12 +16,14 @@ class ResultActivity : AppCompatActivity() {
 
         val imageUriString = intent.getStringExtra("imageUri")
         val imageUri = Uri.parse(imageUriString)
-        val hasil = intent.getStringExtra("hasil")
         val namaBuah = intent.getStringExtra("selectedFruit")
         val description = intent.getStringExtra("description")
+        val hasil = intent.getStringExtra("hasil")
+        val resultColor = intent.getIntExtra("resultColor", Color.BLACK)
 
         binding.namaBuah.text = "$namaBuah"
         binding.kematangan.text = "$hasil"
+        binding.kematangan.setTextColor(resultColor)
         if (imageUri != null) {
             binding.resultImage.setImageURI(imageUri)
         }

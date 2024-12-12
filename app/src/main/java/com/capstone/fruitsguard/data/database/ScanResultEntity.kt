@@ -14,5 +14,6 @@ data class ScanResultEntity(
     val fruitName: String,
     val result: String,
     val timestamp: Long = System.currentTimeMillis(),
-    val imageUrl: String // Tambahkan URL gambar jika diperlukan
+    val imageUrl: String,// Tambahkan URL gambar jika diperlukan
+    val color: Int
 ) : Parcelable

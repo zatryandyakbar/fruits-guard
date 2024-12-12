@@ -6,6 +6,26 @@
     android:background="@color/darkOrange"
     android:orientation="vertical">
 
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:alpha="0.5"
+        android:visibility="gone">
+
+        <!-- Lottie Animasi ditempatkan di sini -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnimationOverlay"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:lottie_rawRes="@raw/animation_loading"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
     <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

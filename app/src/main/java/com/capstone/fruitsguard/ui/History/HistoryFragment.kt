@@ -9,18 +9,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import com.capstone.fruitsguard.R
 import com.capstone.fruitsguard.data.database.AppDatabase
-import com.capstone.fruitsguard.databinding.FragmentHistory2Binding
+import com.capstone.fruitsguard.databinding.FragmentHistoryBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HistoryFragment2 : Fragment() {
+class HistoryFragment : Fragment() {
 
-    private lateinit var binding: FragmentHistory2Binding
+    private lateinit var binding: FragmentHistoryBinding
     private lateinit var adapter: HistoryAdapter
-    private lateinit var recyclerView: RecyclerView
+
     private val database by lazy {
         Room.databaseBuilder(
             requireContext().applicationContext, // Gunakan application context
@@ -34,13 +33,13 @@ class HistoryFragment2 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentHistory2Binding.inflate(inflater, container, false)
+        binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         // Inisialisasi RecyclerView dan adapter
         adapter = HistoryAdapter()
         binding.recyclerViewHistory.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@HistoryFragment2.adapter
+            adapter = this@HistoryFragment.adapter
         }
 
         // Load data dari database

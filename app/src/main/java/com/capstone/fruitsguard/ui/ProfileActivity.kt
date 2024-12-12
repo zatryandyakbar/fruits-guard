@@ -88,9 +88,8 @@ class ProfileActivity : AppCompatActivity() {
 
             // Arahkan ke LoginActivity dan hapus ProfileActivity dari stack
             val intent = Intent(this@ProfileActivity, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
-            finish()
+            finishAffinity()
         }
     }
 
@@ -106,7 +105,7 @@ class ProfileActivity : AppCompatActivity() {
             Glide.with(this)
                 .load(photoUrl)
                 .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache gambar
-                .placeholder(R.drawable.baseline_person_pin_24)
+                .placeholder(R.drawable.ic_profile)
                 .into(binding.imgViewProfile)
         })
 

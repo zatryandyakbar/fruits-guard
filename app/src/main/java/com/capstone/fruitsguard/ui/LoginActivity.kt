@@ -129,6 +129,7 @@ class LoginActivity : AppCompatActivity() {
             val userMap = mapOf(
                 "fullName" to account.displayName,
                 "email" to account.email,
+                "imageUrl" to account.photoUrl?.toString()
             )
 
             val uid = currentUser.uid
@@ -150,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
             //cek apakah login menggunakan goggle icon atau tidak
-            if (auth.currentUser?.providerData?.any { it.providerId == GoogleAuthProvider.PROVIDER_ID } == false) {
+            if (auth.currentUser?.providerData?.any { it.providerId == GoogleAuthProvider.PROVIDER_ID } == true) {
                 //Jika login menggunakan icon Google, arahkan ke mainAvtivity
                 Toast.makeText(this, "Login Berhasil!!!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))

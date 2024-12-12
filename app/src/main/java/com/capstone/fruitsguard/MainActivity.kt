@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.capstone.fruitsguard.databinding.ActivityMainBinding
 import com.capstone.fruitsguard.ui.DetectFragment
-import com.capstone.fruitsguard.ui.History.HistoryFragment2
+import com.capstone.fruitsguard.ui.History.HistoryFragment
 import com.capstone.fruitsguard.ui.ProfileActivity
 
 class MainActivity : AppCompatActivity() {
@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_favorite -> {
-                    if (supportFragmentManager.findFragmentByTag(HistoryFragment2::class.java.simpleName) == null) {
-                        replaceFragment(HistoryFragment2())
+                    if (supportFragmentManager.findFragmentByTag(HistoryFragment::class.java.simpleName) == null) {
+                        replaceFragment(HistoryFragment())
                     }
                     true
                 }

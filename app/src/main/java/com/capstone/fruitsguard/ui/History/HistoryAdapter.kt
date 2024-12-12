@@ -29,11 +29,13 @@ class HistoryAdapter : ListAdapter<ScanResultEntity, HistoryAdapter.ViewHolder>(
             binding.apply {
                 tvNamaBuahHistory.text = scanResult.fruitName
                 tvResultBuahHistory.text = scanResult.result
+                tvResultBuahHistory.setTextColor(scanResult.color)
 
                 // Gunakan Glide dengan error handling
                 Glide.with(imgPhotoHistory.context)
                     .load(File(scanResult.imageUrl))
-                    .error(R.drawable.baseline_person_pin_24) // Tambahkan placeholder gambar
+                    .error(R.drawable.image_preview) // Tambahkan placeholder gambar
+                    .placeholder(R.drawable.image_preview)
                     .into(imgPhotoHistory)
             }
         }

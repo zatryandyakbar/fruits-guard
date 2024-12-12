@@ -5,12 +5,14 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -162,13 +164,13 @@ class DetectFragment : Fragment() {
     }
     @SuppressLint("Recycle")
     private fun analyzeImage(imageUri: Uri, selectedFruit: String, description: String) {
+        showLoading(true)
         try {
             val inputStream = requireContext().contentResolver.openInputStream(imageUri)
             val requestBody = inputStream?.readBytes()?.toRequestBody("image/jpeg".toMediaTypeOrNull())
             val imagePart = requestBody?.let {
                 MultipartBody.Part.createFormData("input", "image.jpg", it)
             }
-
             if (imagePart != null) {
                 val call = ApiClient.instance.uploadImage(imagePart)
                 call.enqueue(object : Callback<PredictResponse> {
@@ -178,10 +180,10 @@ class DetectFragment : Fragment() {
 
                             // Simpan hasil analisis ke dalam Room Database
                             saveAnalysisResult(selectedFruit, result ?: "Tidak Diketahui", imageUri)
-
                             moveToResultActivity(result, selectedFruit, description)
                         } else {
                             val errorBody = response.errorBody()?.string()
+                            showLoading(false)
                             Log.e("API Error", "Error Body: $errorBody")
                             showToast("Gagal memproses: $errorBody")
                         }
@@ -190,26 +192,32 @@ class DetectFragment : Fragment() {
                     override fun onFailure(call: Call<PredictResponse>, t: Throwable) {
                         Log.e("API Failure", "Error: ${t.message}")
                         showToast("Gagal terhubung: ${t.message}")
+                        showLoading(false)
                     }
                 })
             } else {
                 showToast("Gagal membaca gambar")
+                showLoading(false)
             }
         } catch (e: Exception) {
             Log.e("AnalyzeImage Error", "Exception: ${e.message}")
             showToast("Terjadi kesalahan: ${e.message}")
+            showLoading(false)
         }
     }
 
     private fun saveAnalysisResult(fruit: String, result: String, imageUri: Uri) {
         // Gunakan viewModelScope atau lifecycleScope
+        showLoading(false)
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
+                val color = if (result == "Segar") Color.GREEN else Color.RED
                 val savedImageFile = saveImageToInternalStorage(imageUri)
                 val analysisResult = ScanResultEntity(
                     fruitName = fruit,
                     result = result,
-                    imageUrl = savedImageFile.absolutePath
+                    imageUrl = savedImageFile.absolutePath,
+                    color = color
                 )
                 appDatabase.scanResultDao().insertScanResult(analysisResult)
                 withContext(Dispatchers.Main) {
@@ -248,6 +256,8 @@ class DetectFragment : Fragment() {
             putExtra("imageUri", currentImageUri.toString())
             putExtra("selectedFruit", selectedFruit)
             putExtra("description", description)
+            val color = if (hasil == "Segar") Color.GREEN else Color.RED
+            putExtra("resultColor", color)
         }
         startActivity(intent)
     }
@@ -297,6 +307,16 @@ class DetectFragment : Fragment() {
         currentImageUri = null
         originalImageUri = null
         selectedFruit = null
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.loadingOverlay.visibility = View.VISIBLE
+            binding.loadingAnimationOverlay.playAnimation()
+        } else {
+            binding.loadingOverlay.visibility = View.GONE
+            binding.loadingAnimationOverlay.cancelAnimation()
+        }
     }
 
     companion object {

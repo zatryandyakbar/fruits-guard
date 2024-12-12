@@ -47,6 +47,7 @@ class ProfileViewModel : ViewModel() {
     // Function to load user profile photo
     fun loadProfilePhoto() {
         val currentUser = auth.currentUser
+        _imageUrl.value = currentUser?.photoUrl?.toString()
         val uid = currentUser?.uid
 
         if (uid != null) {
